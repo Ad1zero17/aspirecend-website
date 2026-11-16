@@ -12,14 +12,15 @@ Agentur-Website von **Aspirecend** (Tobias Schieler) – Meta-Ads-Management fü
 
 ## Struktur
 
-- `wachstum-ads/index.html` – die Landingpage (Pfad `/wachstum-ads`)
-- `assets/style.css` – globales Stylesheet (Design-Tokens oben in `:root`)
-- `index.html` – leitet vorerst auf `/wachstum-ads/` weiter
-- Statisches HTML/CSS ohne Framework/Build-Step. Deployment-Ziel: Vercel oder Cloudflare Pages (statisch).
+- `public/` – alles, was online geht. Nur dieser Ordner wird veröffentlicht; Notizen wie diese Datei bleiben draußen.
+- `public/wachstum-ads/index.html` – die Landingpage (Pfad `/wachstum-ads`)
+- `public/assets/style.css` – globales Stylesheet (Design-Tokens oben in `:root`)
+- `public/index.html` – leitet vorerst auf `/wachstum-ads/` weiter
+- Statisches HTML/CSS ohne Framework/Build-Step. Deployment: Cloudflare Pages (statisch, Ausgabeordner `public`, kein Build-Befehl).
 
 ## Arbeitsweise
 
 - Tobias ist kein Entwickler: Änderungen als klare Umsetzung seiner Ansagen, keine Rückfragen zu Code-Details. Deutsch antworten.
 - Texte/Zahlen (Cases, Testimonials, FAQ) stammen von der echten Webflow-Seite – keine Zahlen erfinden oder „verbessern".
 - Mobile ist der wichtigste Viewport (Meta-Ads-Traffic): jede Änderung auch bei ~390 px prüfen.
-- Lokale Vorschau: `npx serve` im Repo-Root (oder Datei direkt im Browser öffnen).
+- Lokale Vorschau: Auf dem Mac ist kein Node installiert, also `python3 -m http.server` im Ordner `public/` statt `npx serve`. Die Vorschau der Claude-App kann `~/Documents` nicht direkt lesen: `public/` vorher in einen temporären Ordner kopieren und von dort ausliefern.

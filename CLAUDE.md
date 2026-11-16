@@ -17,6 +17,7 @@ Agentur-Website von **Aspirecend** (Tobias Schieler) – Meta-Ads-Management fü
 - `public/assets/style.css` – globales Stylesheet (Design-Tokens oben in `:root`)
 - `public/index.html` – leitet vorerst auf `/wachstum-ads/` weiter
 - Statisches HTML/CSS ohne Framework/Build-Step. Deployment: Cloudflare Pages (statisch, Ausgabeordner `public`, kein Build-Befehl).
+- **Vorschau-Link:** https://aspirecend-website.pages.dev/wachstum-ads/ – Cloudflare-Pages-Projekt `aspirecend-website`, per Git mit diesem Repo verbunden. Jeder Push auf `main` geht nach etwa einer Minute automatisch online. Unbekannte Pfade liefern die Startseite (Fallback), also beim Prüfen auf echten Seiteninhalt achten, nicht nur auf Status 200.
 
 ## Arbeitsweise
 

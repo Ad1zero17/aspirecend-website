@@ -20,7 +20,7 @@
   --navy-deep: #0A0F2E;
   --font-display: "Playfair Display", "Iowan Old Style", Georgia, serif;
   --font-ui: "Montserrat", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, sans-serif;
+  --font-body: "Montserrat", system-ui, sans-serif;
 }
 
 * { box-sizing: border-box; }

@@ -15,6 +15,7 @@ Agentur-Website von **Aspirecend** (Tobias Schieler) – Meta-Ads-Management fü
 - `public/` – alles, was online geht. Nur dieser Ordner wird veröffentlicht; Notizen wie diese Datei bleiben draußen.
 - `public/wachstum-ads/index.html` – die Landingpage (Pfad `/wachstum-ads`)
 - `public/assets/style.css` – globales Stylesheet (Design-Tokens oben in `:root`)
+- `public/assets/logos/` – Kundenlogos (21) und Partner-Abzeichen (4) als transparente PNGs. Stand 18.11.2026 aus den zwei Sammelbildern der Webflow-Seite geschnitten (Auflösung daher begrenzt); schickt Tobias Original-Logodateien, diese hier ersetzen.
 - `public/index.html` – leitet vorerst auf `/wachstum-ads/` weiter
 - Statisches HTML/CSS ohne Framework/Build-Step. Deployment: Cloudflare Pages (statisch, Ausgabeordner `public`, kein Build-Befehl).
 - **Vorschau-Link:** https://aspirecend-website.pages.dev/wachstum-ads/ – Cloudflare-Pages-Projekt `aspirecend-website`, per Git mit diesem Repo verbunden. Jeder Push auf `main` geht nach etwa einer Minute automatisch online. Unbekannte Pfade liefern die Startseite (Fallback), also beim Prüfen auf echten Seiteninhalt achten, nicht nur auf Status 200.

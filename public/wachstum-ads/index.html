@@ -217,27 +217,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </section>
 
-  <!-- TESTIMONIALS -->
+  <!-- TESTIMONIALS (Originaltexte auf Englisch von der Webflow-Seite, unverändert; Anriss + Aufklappen) -->
   <section id="stimmen" class="wrap section">
     <div class="section-head reveal">
       <p class="label eyebrow">Kundenstimmen</p>
-      <h2>Was Gründerinnen &amp; Gründer sagen.</h2>
+      <h2>Was unsere Kunden sagen.</h2>
     </div>
-    <div class="grid-3">
-      <article class="glass card reveal">
+    <div class="review-grid">
+      <article class="glass card review reveal">
         <p class="stars" aria-label="5 von 5 Sternen">★★★★★</p>
-        <p class="quote">„Mein Unternehmen hat sich im letzten Jahr <strong style="color: #fff">verzehnfacht</strong>. Ich kann den Unterschied gar nicht glauben – sie sind Marketing-Genies."</p>
-        <p class="person"><strong>Siobhan</strong><span>CEO &amp; Founder, IntoGaia</span></p>
+        <p class="review-title" lang="en">“One of the best decision I’ve made.”</p>
+        <div class="review-body" id="review-wakim" lang="en">
+          <p>My team and I were working on our own marketing since the past 5 years hence as we all know the advertising is extremely important in a business. I am very perfectionist and I like the things well done. However, I started to be very busy with my work and I started working with a few marketing agencies, the result was alright but I was not convinced at all. I had to come back to own roots. After some time I found out Tobias’s agency and, without big faith I gave it a shot. That’s was one of the best decision I’ve made.</p>
+          <p>I indeed succeeded to scale my business properly and really understand everything about my clients, all of this because of Aspirecend.</p>
+          <p>Month after month, my numbers started to grow and we found out how to touch the right audience for my product, which is a game changer.</p>
+          <p>I definitely recommend Aspirecend to every small or big business, especially in the fashion industry where they nailed it !</p>
+        </div>
+        <button class="review-toggle" type="button" aria-expanded="false" aria-controls="review-wakim" hidden><span>Weiterlesen</span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <p class="person"><strong>Wakim Krari</strong><span>Maison Les Énervés</span></p>
       </article>
-      <article class="glass card reveal">
+      <article class="glass card review reveal">
         <p class="stars" aria-label="5 von 5 Sternen">★★★★★</p>
-        <p class="quote">„Die Resultate haben nicht nur unsere Ziele erreicht, sondern sie <strong style="color: #fff">deutlich übertroffen</strong>. Mein digitales Marketing hat sich komplett verbessert."</p>
-        <p class="person"><strong>Federico Uribe</strong><span>CEO &amp; Founder, 209Mare</span></p>
-      </article>
-      <article class="glass card reveal">
-        <p class="stars" aria-label="5 von 5 Sternen">★★★★★</p>
-        <p class="quote">„Sofort Resultate, die <strong style="color: #fff">besser waren als bei jeder anderen Agentur</strong>, mit der wir je gearbeitet haben."</p>
-        <p class="person"><strong>Sheryl Hawkins</strong><span>Co-Founder, Lusher</span></p>
+        <p class="review-title" lang="en">“They immediately started to produce results that were superior to any other agency we used”</p>
+        <div class="review-body" id="review-sheryl" lang="en">
+          <p>We, like many businesses, have used several social media advertising companies, agencies and high priced ‘guru’s’ who insisted on additional services we just never needed. We had challenges with the use of our content, understanding our brand, customers and products. It was frustrating and took far too much of our time and attention away from the development and enjoyment of our products and business. When Tobias and his team reached out to us we were skeptical after so many bad experiences. His clear communication and understanding and embracing our needs and product convinced us to give him a try and his team a go.</p>
+          <p>Within a very short time we were not only impressed with his communication and ability to use our content to reach the right audience but he immediately started to produce results that were superior to any other agency we used. Aspire continues to care about the growth of our brand, gives us clear ideas about what content works best so we can tailor our marketing efforts which is invaluable advice for those of us needing to continue to create content and we genuinely enjoy working with them.</p>
+          <p>I highly recommend Aspire to anyone looking for a reliable, trustworthy team.</p>
+        </div>
+        <button class="review-toggle" type="button" aria-expanded="false" aria-controls="review-sheryl" hidden><span>Weiterlesen</span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <p class="person"><strong>Sheryl Hawkins</strong><span>Lusher</span></p>
       </article>
     </div>
   </section>
@@ -378,6 +386,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         });
       }, { threshold: 0.35 }).observe(viz);
       viz.closest('.card').addEventListener('click', restart);
+    });
+  })();
+
+  // Kundenstimmen: Anriss zeigen, per Klick ganz aufklappen (ohne JS steht der volle Text da).
+  (function () {
+    document.querySelectorAll('.review').forEach(function (card) {
+      var body = card.querySelector('.review-body'), btn = card.querySelector('.review-toggle');
+      if (!body || !btn) return;
+      var label = btn.querySelector('span');
+      if (body.scrollHeight <= body.clientHeight + 4) return; // passt schon ganz rein
+      btn.hidden = false;
+      function toggle() {
+        var open = !card.classList.contains('is-open');
+        if (open) {
+          card.classList.add('is-open');
+          body.style.maxHeight = body.scrollHeight + 'px';
+          setTimeout(function () { if (card.classList.contains('is-open')) body.style.maxHeight = 'none'; }, 600);
+        } else {
+          body.style.maxHeight = body.scrollHeight + 'px';
+          body.offsetHeight; // Reflow, damit das Zuklappen animiert
+          card.classList.remove('is-open');
+          body.style.maxHeight = '';
+          var top = card.getBoundingClientRect().top;
+          if (top < 90) window.scrollBy({ top: top - 100, behavior: 'smooth' });
+        }
+        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        label.textContent = open ? 'Weniger anzeigen' : 'Weiterlesen';
+      }
+      btn.addEventListener('click', toggle);
+      body.addEventListener('click', function () { if (!card.classList.contains('is-open')) toggle(); });
+      body.addEventListener('transitionend', function () { if (card.classList.contains('is-open')) body.style.maxHeight = 'none'; });
     });
   })();
 </script>

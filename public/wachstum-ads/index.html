@@ -172,11 +172,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <video controls muted loop playsinline preload="none" poster="../assets/video/fairdim-interview-poster.jpg" width="720" height="900" aria-label="Interview: Ali, Founder von FAIRDIM, im Gespräch mit Tobias">
           <source src="../assets/video/fairdim-interview.mp4" type="video/mp4">
         </video>
-        <button class="interview-sound" type="button" aria-pressed="false" hidden><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="snd-on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Ton an</span></button>
+        <div class="interview-controls" hidden>
+          <button class="interview-pause" type="button" aria-label="Video anhalten"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path class="ico-pause" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/><path class="ico-play" d="M8 5.5v13l11-6.5z"/></svg></button>
+          <button class="interview-sound" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="snd-on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Ton an</span></button>
+        </div>
       </div>
       <div class="interview-text">
         <p class="label eyebrow">Im Gespräch</p>
-        <img class="interview-logo" src="../assets/logos/fairdim-trim.png" alt="FAIRDIM" width="162" height="33" loading="lazy" decoding="async">
+        <img class="interview-logo" src="../assets/logos/fairdim-logo.png" alt="FAIRDIM" width="640" height="119" loading="lazy" decoding="async">
         <h2 class="interview-title" lang="en">“We start seeing some results right away.”</h2>
         <p class="interview-q" lang="en">Tobias: “Where was the brand when we started working together?”</p>
         <blockquote lang="en">“To be honest with you, the brand actually was nowhere online. We weren’t getting much traction in sales online because we weren’t running things properly in terms of ads. But luckily we had you there, push through, and sales were coming in, and we start seeing some results right away.”</blockquote>
@@ -268,7 +271,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a class="vcard-media" href="https://vimeo.com/826822356/95dc9c168a" target="_blank" rel="noopener" data-vimeo="826822356" data-hash="95dc9c168a" data-ar="1.7680" aria-label="Video-Testimonial von Federico Uribe (209Mare) abspielen">
           <img src="../assets/testimonials/federico-209mare.jpg" alt="" width="960" height="543" loading="lazy" decoding="async">
           <span class="vcard-play"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
-          <span class="vcard-brand"><img src="../assets/logos/209-mare-trim.png" alt="209 Mare" width="159" height="35" loading="lazy" decoding="async"></span>
+          <span class="vcard-brand"><img src="../assets/logos/209-mare-trim.png" alt="209 Mare" width="399" height="80" loading="lazy" decoding="async"></span>
           <span class="vcard-meta"><strong>Federico Uribe</strong><span>CEO &amp; Founder, 209Mare</span></span>
         </a>
         <blockquote class="vcard-quote" hidden>„Unser ROAS hat sich stetig erhöht. Die Zusammenarbeit mit Aspirecend ist, anders als mit anderen Agenturen in der Vergangenheit, sehr einfach, weil der Kommunikationsfluss immer gegeben ist. Ich kann sie wirklich zu jeder Tageszeit kontaktieren. Ich bin sehr zufrieden mit der Arbeit von Aspirecend und freue mich darauf, diese Zusammenarbeit auch in Zukunft fortzusetzen.“</blockquote>
@@ -277,6 +280,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <a class="vcard-media" href="https://vimeo.com/906756779" target="_blank" rel="noopener" data-vimeo="906756779" data-hash="" data-ar="0.9057" aria-label="Video-Testimonial von Roshni (LittleIA) abspielen">
           <img src="../assets/testimonials/roshni-littleia.jpg" alt="" width="720" height="795" loading="lazy" decoding="async">
           <span class="vcard-play"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg></span>
+          <span class="vcard-brand"><img src="../assets/logos/littleia-trim.png" alt="LittleIA" width="351" height="96" loading="lazy" decoding="async" style="max-height: 23px"></span>
           <span class="vcard-meta"><strong>Roshni</strong><span>CEO &amp; Founder, LittleIA</span></span>
         </a>
         <blockquote class="vcard-quote" hidden>„Ich habe mit drei verschiedenen Agenturen gearbeitet, bevor ich mit Aspirecend zusammenarbeitete, und ich kann mit Sicherheit sagen, dass sie unglaublich professionell sind. Ich fühle mich bei unserer digitalen Marketingstrategie so gut unterstützt wie bei keiner anderen Agentur zuvor. Sie fühlen sich nicht wie eine Agentur, sondern fast wie eine Erweiterung meines internen Teams an. Endlich verstehe ich, was mit unseren Anzeigen passiert. Insgesamt eine großartige Erfahrung.“</blockquote>
@@ -455,19 +459,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
   })();
 
-  // Interview-Video: läuft stumm in Schleife, solange es sichtbar ist (Untertitel sind im Bild);
-  // Knopf oder Tipp aufs Video schaltet den Ton an und startet von vorn.
+  // Interview-Video: läuft stumm in Schleife, solange es sichtbar ist (Untertitel sind im Bild).
+  // Knöpfe oben rechts: Anhalten/Abspielen und Ton an/aus. Tipp aufs Video schaltet ebenfalls den Ton.
   (function () {
     var box = document.querySelector('.interview-video');
     if (!box || !('IntersectionObserver' in window)) return;
-    var video = box.querySelector('video'), btn = box.querySelector('.interview-sound');
+    var video = box.querySelector('video'), controls = box.querySelector('.interview-controls');
+    var btn = box.querySelector('.interview-sound'), pauseBtn = box.querySelector('.interview-pause');
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     video.controls = false;
-    btn.hidden = false;
-    var visible = false, tracked = false;
+    controls.hidden = false;
+    var visible = false, tracked = false, userPaused = false;
     function tryPlay() {
       var p = video.play();
-      if (p && p.catch) p.catch(function () { video.controls = true; btn.hidden = true; });
+      if (p && p.catch) p.catch(function () { video.controls = true; controls.hidden = true; });
     }
     function setSound(on) {
       video.muted = !on;
@@ -475,17 +480,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       btn.classList.toggle('is-on', on);
       btn.querySelector('span').textContent = on ? 'Ton aus' : 'Ton an';
       if (on) {
+        userPaused = false;
         video.currentTime = 0;
         tryPlay();
         if (!tracked && window.dataLayer) { tracked = true; window.dataLayer.push({ event: 'interview_video_sound_on', interview_video: 'fairdim' }); }
       }
     }
+    function syncPause() {
+      pauseBtn.classList.toggle('is-paused', video.paused);
+      pauseBtn.setAttribute('aria-label', video.paused ? 'Video abspielen' : 'Video anhalten');
+    }
+    video.addEventListener('play', syncPause);
+    video.addEventListener('pause', syncPause);
+    pauseBtn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      if (video.paused) { userPaused = false; tryPlay(); } else { userPaused = true; video.pause(); }
+    });
     btn.addEventListener('click', function (e) { e.stopPropagation(); setSound(video.muted); });
     video.addEventListener('click', function () { if (!video.controls) setSound(video.muted); });
     new IntersectionObserver(function (entries) {
       entries.forEach(function (e) {
         visible = e.isIntersecting;
-        if (visible) tryPlay(); else video.pause();
+        if (!visible) video.pause();
+        else if (!userPaused) tryPlay(); // selbst angehalten bleibt angehalten
       });
     }, { threshold: 0.5 }).observe(box);
   })();

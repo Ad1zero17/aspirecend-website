@@ -217,7 +217,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </section>
 
-  <!-- TESTIMONIALS (Originaltexte auf Englisch von der Webflow-Seite, unverändert; Anriss + Aufklappen) -->
+  <!-- TESTIMONIALS (Originaltexte auf Englisch von der Webflow-Seite, unverändert; Anriss in der Karte, voller Text im Fenster) -->
   <section id="stimmen" class="wrap section">
     <div class="section-head reveal">
       <p class="label eyebrow">Kundenstimmen</p>
@@ -233,7 +233,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <p>Month after month, my numbers started to grow and we found out how to touch the right audience for my product, which is a game changer.</p>
           <p>I definitely recommend Aspirecend to every small or big business, especially in the fashion industry where they nailed it !</p>
         </div>
-        <button class="review-toggle" type="button" aria-expanded="false" aria-controls="review-wakim" hidden><span>Weiterlesen</span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <button class="review-toggle" type="button" aria-haspopup="dialog" hidden><span>Ganzes Review lesen</span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
         <p class="person"><strong>Wakim Krari</strong><span>Maison Les Énervés</span></p>
       </article>
       <article class="glass card review reveal">
@@ -244,7 +244,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <p>Within a very short time we were not only impressed with his communication and ability to use our content to reach the right audience but he immediately started to produce results that were superior to any other agency we used. Aspire continues to care about the growth of our brand, gives us clear ideas about what content works best so we can tailor our marketing efforts which is invaluable advice for those of us needing to continue to create content and we genuinely enjoy working with them.</p>
           <p>I highly recommend Aspire to anyone looking for a reliable, trustworthy team.</p>
         </div>
-        <button class="review-toggle" type="button" aria-expanded="false" aria-controls="review-sheryl" hidden><span>Weiterlesen</span><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+        <button class="review-toggle" type="button" aria-haspopup="dialog" hidden><span>Ganzes Review lesen</span><svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></button>
         <p class="person"><strong>Sheryl Hawkins</strong><span>Lusher</span></p>
       </article>
     </div>
@@ -310,6 +310,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </section>
 
 </main>
+
+<dialog class="review-dialog" id="review-dialog" aria-label="Kundenstimme im Volltext">
+  <div class="review-dialog-inner">
+    <button class="review-dialog-close" type="button" aria-label="Fenster schließen"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <div class="review-dialog-content"></div>
+  </div>
+</dialog>
 
 <footer>
   <div class="wrap footer-inner">
@@ -389,35 +396,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
   })();
 
-  // Kundenstimmen: Anriss zeigen, per Klick ganz aufklappen (ohne JS steht der volle Text da).
+  // Kundenstimmen: Karte zeigt nur einen Anriss; Klick öffnet den vollen Text in einem Fenster.
+  // Ohne JS oder ohne <dialog>-Unterstützung steht der volle Text direkt in der Karte.
   (function () {
-    document.querySelectorAll('.review').forEach(function (card) {
-      var body = card.querySelector('.review-body'), btn = card.querySelector('.review-toggle');
-      if (!body || !btn) return;
-      var label = btn.querySelector('span');
-      if (body.scrollHeight <= body.clientHeight + 4) return; // passt schon ganz rein
-      btn.hidden = false;
-      function toggle() {
-        var open = !card.classList.contains('is-open');
-        if (open) {
-          card.classList.add('is-open');
-          body.style.maxHeight = body.scrollHeight + 'px';
-          setTimeout(function () { if (card.classList.contains('is-open')) body.style.maxHeight = 'none'; }, 600);
-        } else {
-          body.style.maxHeight = body.scrollHeight + 'px';
-          body.offsetHeight; // Reflow, damit das Zuklappen animiert
-          card.classList.remove('is-open');
-          body.style.maxHeight = '';
-          var top = card.getBoundingClientRect().top;
-          if (top < 90) window.scrollBy({ top: top - 100, behavior: 'smooth' });
-        }
-        btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        label.textContent = open ? 'Weniger anzeigen' : 'Weiterlesen';
-      }
-      btn.addEventListener('click', toggle);
-      body.addEventListener('click', function () { if (!card.classList.contains('is-open')) toggle(); });
-      body.addEventListener('transitionend', function () { if (card.classList.contains('is-open')) body.style.maxHeight = 'none'; });
+    var dlg = document.getElementById('review-dialog'), grid = document.querySelector('.review-grid');
+    if (!dlg || !grid || typeof dlg.showModal !== 'function') return;
+    var content = dlg.querySelector('.review-dialog-content');
+    grid.classList.add('has-modal');
+    function open(card) {
+      content.innerHTML = '';
+      ['.stars', '.review-title', '.review-body', '.person'].forEach(function (sel) {
+        var el = card.querySelector(sel);
+        if (!el) return;
+        var copy = el.cloneNode(true);
+        copy.removeAttribute('id');
+        content.appendChild(copy);
+      });
+      dlg.showModal();
+      dlg.scrollTop = 0;
+    }
+    grid.querySelectorAll('.review').forEach(function (card) {
+      var btn = card.querySelector('.review-toggle');
+      if (btn) btn.hidden = false;
+      card.addEventListener('click', function () { open(card); });
     });
+    dlg.querySelector('.review-dialog-close').addEventListener('click', function () { dlg.close(); });
+    dlg.addEventListener('click', function (e) { if (e.target === dlg) dlg.close(); }); // Klick neben das Fenster
   })();
 </script>
 

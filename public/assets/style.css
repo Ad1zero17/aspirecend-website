@@ -358,10 +358,10 @@ h2 {
 .review-toggle[hidden] { display: none; }
 
 /* Video-Testimonials: Hochkant-Kacheln mit Vorschaubild; Klick öffnet den Player im Fenster */
-.video-row { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 16px; }
+.video-row { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
 .vcard { min-width: 0; }
 .vcard-media {
-  position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden;
+  position: relative; display: block; aspect-ratio: 1 / 1; overflow: hidden;
   border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.12);
   background: #150c2e; color: var(--cream);
   transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
@@ -516,6 +516,7 @@ footer { border-top: 1px solid rgba(255, 255, 255, 0.07); }
   }
   .video-row::-webkit-scrollbar { display: none; }
   .vcard { scroll-snap-align: start; }
+  .vcard-media { aspect-ratio: 4 / 5; }
   #cases .grid-3 { grid-template-columns: 1fr; max-width: 560px; }
   .grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .faq-grid { grid-template-columns: 1fr; gap: 36px; }

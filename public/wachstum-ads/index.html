@@ -169,17 +169,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <section id="fairdim" class="wrap section">
     <div class="interview glass reveal">
       <div class="interview-video">
-        <video controls muted loop playsinline preload="none" poster="../assets/video/fairdim-interview-poster.jpg" width="720" height="900" aria-label="Interview: Ali, Founder von FAIRDIM, im Gespräch mit Tobias">
+        <video controls muted loop playsinline preload="none" data-duration="23" poster="../assets/video/fairdim-interview-poster.jpg" width="720" height="900" aria-label="Interview: Ali, Founder von FAIRDIM, im Gespräch mit Tobias">
           <source src="../assets/video/fairdim-interview.mp4" type="video/mp4">
         </video>
         <div class="interview-controls" hidden>
           <button class="interview-pause" type="button" aria-label="Video anhalten"><svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path class="ico-pause" d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z"/><path class="ico-play" d="M8 5.5v13l11-6.5z"/></svg></button>
           <button class="interview-sound" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path class="snd-on" d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg><span>Ton an</span></button>
         </div>
+        <span class="interview-time" hidden>0:00 / 0:23</span>
+        <div class="interview-progress" role="slider" tabindex="0" aria-label="Fortschritt im Video" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" hidden><span class="interview-progress-track"><i class="interview-progress-fill"></i></span></div>
       </div>
       <div class="interview-text">
         <p class="label eyebrow">Im Gespräch</p>
-        <img class="interview-logo" src="../assets/logos/fairdim-logo.png" alt="FAIRDIM" width="640" height="119" loading="lazy" decoding="async">
+        <img class="interview-logo" src="../assets/logos/fairdim-logo-cream.png" alt="FAIRDIM" width="640" height="119" loading="lazy" decoding="async">
         <h2 class="interview-title" lang="en">“We start seeing some results right away.”</h2>
         <p class="interview-q" lang="en">Tobias: “Where was the brand when we started working together?”</p>
         <blockquote lang="en">“To be honest with you, the brand actually was nowhere online. We weren’t getting much traction in sales online because we weren’t running things properly in terms of ads. But luckily we had you there, push through, and sales were coming in, and we start seeing some results right away.”</blockquote>
@@ -472,7 +474,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var visible = false, tracked = false, userPaused = false;
     function tryPlay() {
       var p = video.play();
-      if (p && p.catch) p.catch(function () { video.controls = true; controls.hidden = true; });
+      if (p && p.catch) p.catch(function () { video.controls = true; controls.hidden = true; bar.hidden = true; time.hidden = true; });
     }
     function setSound(on) {
       video.muted = !on;
@@ -490,6 +492,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       pauseBtn.classList.toggle('is-paused', video.paused);
       pauseBtn.setAttribute('aria-label', video.paused ? 'Video abspielen' : 'Video anhalten');
     }
+    // Fortschrittsbalken + Zeitangabe; Klick/Tipp auf den Balken springt an die Stelle.
+    var bar = box.querySelector('.interview-progress'), fill = box.querySelector('.interview-progress-fill');
+    var time = box.querySelector('.interview-time'), raf = 0;
+    bar.hidden = false; time.hidden = false;
+    function dur() { return isFinite(video.duration) && video.duration > 0 ? video.duration : +video.getAttribute('data-duration'); }
+    function clock(s) { s = Math.floor(s); return Math.floor(s / 60) + ':' + ('0' + (s % 60)).slice(-2); }
+    function paint() {
+      var d = dur(), p = Math.min(1, video.currentTime / d);
+      fill.style.width = (p * 100).toFixed(2) + '%';
+      time.textContent = clock(video.currentTime) + ' / ' + clock(d);
+      bar.setAttribute('aria-valuenow', Math.round(p * 100));
+    }
+    function loop() { paint(); raf = requestAnimationFrame(loop); }
+    video.addEventListener('play', function () { cancelAnimationFrame(raf); loop(); });
+    video.addEventListener('pause', function () { cancelAnimationFrame(raf); paint(); });
+    video.addEventListener('seeked', paint);
+    bar.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var r = bar.getBoundingClientRect();
+      video.currentTime = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)) * dur();
+      paint();
+    });
+    bar.addEventListener('keydown', function (e) {
+      if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+      e.preventDefault();
+      video.currentTime = Math.max(0, Math.min(dur() - 0.1, video.currentTime + (e.key === 'ArrowRight' ? 3 : -3)));
+      paint();
+    });
+    paint();
+
     video.addEventListener('play', syncPause);
     video.addEventListener('pause', syncPause);
     pauseBtn.addEventListener('click', function (e) {

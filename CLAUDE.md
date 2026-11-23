@@ -13,6 +13,7 @@ Agentur-Website von **Aspirecend** (Tobias Schieler) – Meta-Ads-Management fü
 ## Struktur
 
 - `public/` – alles, was online geht. Nur dieser Ordner wird veröffentlicht; Notizen wie diese Datei bleiben draußen.
+- `functions/assets/video/[[path]].js` – kleine Cloudflare-Pages-Funktion (läuft bei Cloudflare, kein eigener Server): liefert Videos unter `/assets/video/*` in Teilstücken aus (Range/206). Ohne das spielt Safari auf dem iPhone selbst gehostete Videos nicht ab, weil Pages statische Dateien nur am Stück ausliefert. Nach Änderungen an Videos prüfen: `curl -H "Range: bytes=0-999"` muss 206 liefern.
 - `public/wachstum-ads/index.html` – die Landingpage (Pfad `/wachstum-ads`)
 - `public/assets/style.css` – globales Stylesheet (Design-Tokens oben in `:root`)
 - Case-Karten (`.card--case`) haben oben eine animierte Mini-Ansicht (`.viz`, Vorbild rize.io, seit 23.11.2026): zwei Balken + Notiz, Schleife per kleinem Script am Seitenende. Alle Werte darin sind die echten Case-Zahlen aus dem Kartentext – bei Textänderungen `data-from`/`data-to`, Balken-Prozent (`--from`) und Notiz mit anpassen.

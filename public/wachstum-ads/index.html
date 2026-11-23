@@ -109,30 +109,51 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <p class="lead" style="font-size: 17px">Keine Hochglanz-Versprechen. Echte Meta-Ad-Accounts unserer Fashion-Kunden, laufend betreut von Tobias &amp; Giovanni.</p>
     </div>
     <div class="grid-3">
-      <article class="glass card reveal">
+      <article class="glass card card--case reveal">
+        <div class="viz" aria-hidden="true">
+          <div class="viz-panel">
+            <div class="viz-head"><span class="viz-title">Monatsumsatz</span><span class="viz-pill">12 Monate</span></div>
+            <div class="viz-row"><span>Vorher</span><span class="viz-track"><i class="viz-fill" style="--from: 11.7%"></i></span><span class="viz-val">11.388&nbsp;€</span></div>
+            <div class="viz-row"><span>Nachher</span><span class="viz-track"><i class="viz-fill viz-fill--grow" style="--from: 11.7%"></i></span><span class="viz-val" data-from="11388" data-to="97068">97.068&nbsp;€</span></div>
+          </div>
+          <div class="viz-toast"><span class="viz-toast-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span><span class="viz-toast-text"><strong>70.958&nbsp;€ Ad Spend</strong><span>Blended ROAS 7,97x</span></span></div>
+        </div>
         <div class="card-top">
           <span class="label" style="color: var(--accent)">Menswear · DE</span>
-          <span class="chip chip--tag">12 Monate</span>
         </div>
         <p class="big">7,97x</p>
         <p class="sub">Blended ROAS</p>
         <hr>
         <p class="quote" style="font-size: 14px">Von 11.388&nbsp;€ auf 97.068&nbsp;€ Monatsumsatz skaliert. 70.958&nbsp;€ Ad Spend, siebenstellige Run-Rate nach einem Jahr.</p>
       </article>
-      <article class="glass card reveal">
+      <article class="glass card card--case reveal">
+        <div class="viz" aria-hidden="true">
+          <div class="viz-panel">
+            <div class="viz-head"><span class="viz-title">Jahresumsatz</span><span class="viz-pill">YoY</span></div>
+            <div class="viz-row"><span>Vorher</span><span class="viz-track"><i class="viz-fill" style="--from: 31.2%"></i></span><span class="viz-val">143.966&nbsp;€</span></div>
+            <div class="viz-row"><span>Nachher</span><span class="viz-track"><i class="viz-fill viz-fill--grow" style="--from: 31.2%"></i></span><span class="viz-val" data-from="143966" data-to="461373">461.373&nbsp;€</span></div>
+          </div>
+          <div class="viz-toast"><span class="viz-toast-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span><span class="viz-toast-text"><strong>Folgejahr</strong><span>weitere +74&nbsp;% obendrauf</span></span></div>
+        </div>
         <div class="card-top">
           <span class="label" style="color: var(--accent)">Womenswear · US</span>
-          <span class="chip chip--tag">YoY</span>
         </div>
         <p class="big">+320&nbsp;%</p>
         <p class="sub">Umsatzwachstum in einem Jahr</p>
         <hr>
         <p class="quote" style="font-size: 14px">Von 143.966&nbsp;€ auf 461.373&nbsp;€ Jahresumsatz – und im Folgejahr weitere +74&nbsp;% obendrauf.</p>
       </article>
-      <article class="glass card reveal">
+      <article class="glass card card--case reveal">
+        <div class="viz" aria-hidden="true">
+          <div class="viz-panel">
+            <div class="viz-head"><span class="viz-title">Weihnachtsgeschäft</span><span class="viz-pill">Q4</span></div>
+            <div class="viz-row"><span>Ad Spend</span><span class="viz-track"><i class="viz-fill" style="--from: 8.3%"></i></span><span class="viz-val">8.717&nbsp;€</span></div>
+            <div class="viz-row"><span>Umsatz</span><span class="viz-track"><i class="viz-fill viz-fill--grow" style="--from: 8.3%"></i></span><span class="viz-val" data-from="8717" data-to="105185">105.185&nbsp;€</span></div>
+          </div>
+          <div class="viz-toast"><span class="viz-toast-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span><span class="viz-toast-text"><strong>12,07x ROAS</strong><span>November &amp; Dezember</span></span></div>
+        </div>
         <div class="card-top">
           <span class="label" style="color: var(--accent)">Accessoires · EU</span>
-          <span class="chip chip--tag">Q4</span>
         </div>
         <p class="big">12,07x</p>
         <p class="sub">ROAS im Weihnachtsgeschäft</p>
@@ -308,6 +329,56 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
     }, { rootMargin: '0px 0px -10% 0px' });
     els.forEach(function (el) { io.observe(el); });
+  })();
+
+  // Case-Karten: Mini-Ansicht spielt in Schleife, solange sie sichtbar ist.
+  // Balken wächst vom Start- zum Endwert, die Zahl zählt mit, dann erscheint die Notiz.
+  (function () {
+    var vizs = document.querySelectorAll('.viz');
+    if (!vizs.length || !('IntersectionObserver' in window) || !window.requestAnimationFrame) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var fmt = function (n) { return Math.round(n).toLocaleString('de-DE') + '\u00a0€'; };
+    vizs.forEach(function (viz, i) {
+      var val = viz.querySelector('.viz-val[data-to]');
+      var from = +val.getAttribute('data-from'), to = +val.getAttribute('data-to');
+      var timers = [], raf = 0, visible = false;
+      viz.classList.add('anim');
+      val.textContent = fmt(from);
+      function clear() { timers.forEach(clearTimeout); timers = []; cancelAnimationFrame(raf); }
+      function count() {
+        var start = null, dur = 1600;
+        (function step(t) {
+          if (start === null) start = t;
+          var p = Math.min(1, (t - start) / dur), e = 1 - Math.pow(1 - p, 3);
+          val.textContent = fmt(from + (to - from) * e);
+          if (p < 1) raf = requestAnimationFrame(step);
+        })(performance.now());
+      }
+      function play() {
+        clear();
+        viz.classList.add('run');
+        timers.push(setTimeout(count, 300));
+        timers.push(setTimeout(function () {
+          viz.classList.remove('run');
+          val.textContent = fmt(from);
+          timers.push(setTimeout(function () { if (visible) play(); }, 900));
+        }, 8000));
+      }
+      function restart() {
+        clear();
+        viz.classList.remove('run');
+        val.textContent = fmt(from);
+        timers.push(setTimeout(play, 500));
+      }
+      new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          visible = e.isIntersecting;
+          if (visible) { if (!viz.classList.contains('run')) timers.push(setTimeout(play, 250 + i * 350)); }
+          else { clear(); viz.classList.remove('run'); val.textContent = fmt(from); }
+        });
+      }, { threshold: 0.35 }).observe(viz);
+      viz.closest('.card').addEventListener('click', restart);
+    });
   })();
 </script>
 

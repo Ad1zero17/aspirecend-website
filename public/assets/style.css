@@ -344,6 +344,12 @@ h2 {
 .chart-start, .viz-chart .chart-end { position: absolute; font-family: var(--font-ui); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .chart-start { left: 0; bottom: 12px; font-size: 10.5px; color: rgba(240, 236, 244, 0.62); }
 .viz-chart .chart-end { left: 0; top: 0; min-width: 0; font-size: 12px; font-weight: 700; color: var(--navy-deep); background: var(--accent); padding: 3px 9px; border-radius: 999px; text-align: center; }
+/* Meilenstein auf der Kurve (Punkt + Wert), erscheint, wenn die Linie dort angekommen ist */
+.chart-mid { position: absolute; width: 0; height: 0; }
+.chart-mid i { position: absolute; left: -4px; top: -4px; width: 8px; height: 8px; border-radius: 50%; background: var(--cream); box-shadow: 0 0 0 3px rgba(231, 194, 125, 0.35); }
+.chart-mid b { position: absolute; left: 50%; bottom: 9px; transform: translateX(-50%); font-family: var(--font-ui); font-size: 10.5px; font-weight: 600; color: var(--cream); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.viz.anim .chart-mid { opacity: 0; transition: opacity 0.3s ease; }
+.viz.anim.run .chart-mid { opacity: 1; transition: opacity 0.4s ease 1.35s; }
 .chart-axis { display: flex; justify-content: space-between; font-size: 10px; color: rgba(240, 236, 244, 0.5); margin-top: -6px; }
 .viz.anim .viz-chart .ln { stroke-dashoffset: 1; transition: stroke-dashoffset 0.4s ease; }
 .viz.anim .viz-chart .ar { opacity: 0; transition: opacity 0.4s ease; }

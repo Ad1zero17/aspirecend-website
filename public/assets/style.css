@@ -452,6 +452,21 @@ section[id], div[id="fairdim"] { scroll-margin-top: 96px; }
 .review-dialog.is-meta { width: min(780px, calc(100% - 20px)); }
 .review-dialog.is-meta .shot-scroll img { min-width: 560px; }
 
+/* Laufband (Anzeigen-Creatives, Logos): Inhalt steht doppelt im Band und läuft nahtlos durch.
+   Hält an, wenn die Maus darauf steht; bei „Bewegung reduzieren“ steht es still und ist wischbar. */
+.marquee { width: 100%; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.marquee-track { display: flex; gap: 16px; width: max-content; animation: marquee 60s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+.marquee img { width: clamp(150px, 17vw, 220px); height: auto; aspect-ratio: 1 / 1; object-fit: cover; border-radius: 18px; border: 1px solid rgba(255, 255, 255, 0.12); flex-shrink: 0; }
+@keyframes marquee { to { transform: translateX(calc(-50% - 8px)); } }
+@media (prefers-reduced-motion: reduce) { .marquee { overflow-x: auto; } .marquee-track { animation: none; } }
+.marquee--small .marquee-track { gap: 12px; animation-duration: 70s; }
+.marquee--small img { width: clamp(96px, 10.5vw, 138px); aspect-ratio: 2 / 3; border-radius: 14px; }
+.marquee--small .marquee-track { animation-name: marquee-small; }
+@keyframes marquee-small { to { transform: translateX(calc(-50% - 6px)); } }
+.creative-strip { display: flex; flex-direction: column; align-items: center; gap: 18px; padding-bottom: clamp(72px, 9vw, 110px); }
+.creative-strip-title { font-size: 11px; color: var(--fg-dim); text-align: center; margin: 0; }
+
 /* Kundenstimmen: Originaltext. Karte zeigt einen kurzen Anriss, der volle Text öffnet sich im Fenster (.review-dialog) */
 .review-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 .review { padding: 28px; gap: 14px; }

@@ -332,6 +332,61 @@ h2 {
 /* --- Testimonials --- */
 .stars { color: var(--accent); font-size: 15px; letter-spacing: 0.2em; margin: 0; }
 
+/* Case-Kachel mit Kurve + Beleg (seit 24.11.2026, Case 1): Kurve im eigenen Design, darunter der
+   echte Shopify-Screenshot (klein, öffnet sich groß) und eine Notiz. */
+.viz--stack { height: auto; padding: 18px 16px 16px; display: flex; flex-direction: column; gap: 14px; }
+.viz--stack .viz-panel { position: relative; left: auto; right: auto; top: auto; gap: 8px; padding-bottom: 12px; }
+.viz-chart { position: relative; height: 96px; margin-top: 2px; }
+.viz-chart svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.viz-chart .ln { fill: none; stroke: url(#crv); stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; stroke-dasharray: 1; stroke-dashoffset: 0; }
+.viz-chart .ar { fill: url(#crvfill); opacity: 1; }
+.viz-chart .base { stroke: rgba(255, 255, 255, 0.12); stroke-width: 1; vector-effect: non-scaling-stroke; }
+.chart-start, .viz-chart .chart-end { position: absolute; font-family: var(--font-ui); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.chart-start { left: 0; bottom: 12px; font-size: 10.5px; color: rgba(240, 236, 244, 0.62); }
+.viz-chart .chart-end { left: 0; top: 0; min-width: 0; font-size: 12px; font-weight: 700; color: var(--navy-deep); background: var(--accent); padding: 3px 9px; border-radius: 999px; text-align: center; }
+.chart-axis { display: flex; justify-content: space-between; font-size: 10px; color: rgba(240, 236, 244, 0.5); margin-top: -6px; }
+.viz.anim .viz-chart .ln { stroke-dashoffset: 1; transition: stroke-dashoffset 0.4s ease; }
+.viz.anim .viz-chart .ar { opacity: 0; transition: opacity 0.4s ease; }
+.viz.anim .chart-end { opacity: 0; transform: translateY(6px); transition: opacity 0.3s ease, transform 0.3s ease; }
+.viz.anim.run .viz-chart .ln { stroke-dashoffset: 0; transition: stroke-dashoffset 2.2s cubic-bezier(0.45, 0.05, 0.3, 1) 0.3s; }
+.viz.anim.run .viz-chart .ar { opacity: 1; transition: opacity 0.9s ease 1.6s; }
+.viz.anim.run .chart-end { opacity: 1; transform: none; transition: opacity 0.4s ease 0.5s, transform 0.4s ease 0.5s; }
+
+.viz-proof {
+  position: relative; display: block; width: 100%; padding: 0 0 22px;
+  background: none; border: 0; cursor: zoom-in; text-align: left; font: inherit; color: inherit;
+}
+.viz-proof .shot-panel {
+  display: block; position: relative;
+  border-radius: 10px; overflow: hidden; background: #fff;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4); transform: rotate(0.8deg);
+  transition: transform 0.25s ease;
+}
+.viz-proof:hover .shot-panel { transform: rotate(0deg) scale(1.02); }
+.viz-proof .shot-panel img { width: 100%; height: auto; display: block; }
+/* Knopf hängt unten rechts am Screenshot, die Notiz unten links: so bleibt der Verlauf frei sichtbar */
+.shot-chip {
+  position: absolute; right: 6px; bottom: 2px; display: inline-flex; align-items: center; gap: 6px;
+  height: 28px; padding: 0 11px; border-radius: 999px;
+  background: var(--cream); color: var(--navy-deep);
+  font-family: var(--font-ui); font-weight: 700; font-size: 11.5px;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+}
+/* Notiz hängt unten links halb über den Rand, verdeckt nur die Achsenbeschriftung */
+.viz-proof .viz-toast { left: 6px; right: auto; bottom: 0; padding: 7px 12px 7px 7px; }
+.viz.anim .viz-proof .viz-toast { transform: translateY(14px) rotate(-2deg); }
+.viz.anim.run .viz-proof .viz-toast { transform: rotate(-2deg); }
+
+.review-dialog.is-image { width: min(1180px, calc(100% - 20px)); }
+.review-dialog.is-image .review-dialog-inner { padding: clamp(18px, 3vw, 30px); padding-top: 58px; }
+.review-dialog.is-image .review-dialog-close { margin-top: -44px; }
+.shot-caption { font-family: var(--font-ui); font-size: 13px; color: var(--fg-dim); margin: 0; }
+.shot-caption strong { color: var(--cream); font-weight: 600; }
+.shot-scroll { overflow-x: auto; border-radius: 12px; background: #fff; -webkit-overflow-scrolling: touch; }
+.shot-scroll img { display: block; width: 100%; min-width: 760px; height: auto; }
+.shot-hint { display: none; font-size: 12px; color: var(--fg-faint); margin: 0; }
+@media (max-width: 800px) { .shot-hint { display: block; } }
+
 /* Kundenstimmen: Originaltext. Karte zeigt einen kurzen Anriss, der volle Text öffnet sich im Fenster (.review-dialog) */
 .review-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
 .review { padding: 28px; gap: 14px; }
@@ -603,6 +658,10 @@ footer { border-top: 1px solid rgba(255, 255, 255, 0.07); }
   .video-row { margin: 0 -14px; padding: 6px 14px 10px; scroll-padding-left: 14px; }
 }
 @media (max-width: 520px) {
+  /* Case-Kachel: Badge und Vergrößern-Knopf passen nebeneinander (Badge ohne Symbol, Knopf kompakter) */
+  .viz-proof .viz-toast-icon { display: none; }
+  .viz-proof .viz-toast { padding: 7px 12px; left: 4px; }
+  .shot-chip { right: 4px; padding: 0 9px; font-size: 11px; gap: 5px; }
   .grid-4 { grid-template-columns: 1fr; }
   .btn { font-size: 15px; padding-left: 24px; gap: 14px; }
   .btn-arrow { width: 42px; height: 42px; }

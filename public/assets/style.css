@@ -367,42 +367,33 @@ h2 {
 .card--case > * { position: relative; z-index: 1; }
 @media (hover: hover) and (pointer: fine) { .card--case:hover::before { opacity: 1; } }
 
-/* Kopfzeile der Kachel: „Case 1“ + Kategorie */
-.card-top--case { justify-content: flex-start; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+/* Kopfzeile der Kachel: „Case 1“ + Icon + Kategorie, mittig und auf einer Linie */
+.card-top--case { justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 12px; }
+.case-no, .case-cat { line-height: 1; }
 .case-no { color: var(--accent); }
-.case-cat { display: inline-flex; align-items: center; gap: 8px; color: rgba(240, 236, 244, 0.7); font-size: 11px; letter-spacing: 0.18em; }
-.case-ico { flex-shrink: 0; color: var(--accent); margin-top: -1px; }
-/* Kopfzeile steht über dem Diagramm: das Diagramm rückt dann nicht mehr an die Oberkante */
-.card--case { padding-top: 24px; gap: 16px; }
-.card-top--case + .viz { margin-top: 0; }
-/* Große Zahl als echter Eurobetrag, etwas kleiner als die früheren Kurzwerte, damit sie in eine Zeile passt */
-.card .big--money { font-size: clamp(38px, 3.3vw, 46px); white-space: nowrap; }
+.case-cat { display: inline-flex; align-items: center; gap: 7px; color: rgba(240, 236, 244, 0.7); font-size: 10px; letter-spacing: 0.18em; }
+.case-ico { flex-shrink: 0; width: 14px; height: 14px; color: var(--accent); }
+.card--case { padding-top: 24px; gap: 14px; }
+/* Ein Satz unter der Kopfzeile, mittig */
+.case-line { margin: 0; text-align: center; font-size: 15px; line-height: 1.55; color: rgba(240, 236, 244, 0.8); text-wrap: balance; }
+.case-line strong { color: var(--cream); font-weight: 600; white-space: nowrap; }
+/* Diagramm ist das letzte Element der Kachel und rückt an Seiten und Unterkante */
+.card--case .viz { margin: 4px -20px -20px; }
 
-/* Badge hängt unten rechts unter der Kurve */
-.viz--badge { padding-bottom: 46px; }
-.viz--badge > .viz-toast { right: 12px; bottom: 10px; }
-
-/* Kleiner Original-Screenshot neben der großen Zahl, mit Überzeile und Vergrößern-Knopf */
-/* Zeile unter der großen Zahl: Unterzeile links, kleiner Original-Screenshot rechts */
-.bigrow { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-top: -8px; }
-.bigrow .sub { flex: 1 1 0; min-width: 0; padding-bottom: 10px; }
-.pshot {
-  position: relative; display: flex; flex-direction: column; gap: 5px; min-width: 0;
-  padding: 0 0 9px; background: none; border: 0; cursor: zoom-in; text-align: left; font: inherit; color: inherit;
+/* Der Original-Screenshot klebt als kleines, immer sichtbares Bild unten rechts an der Kurve */
+.viz--badge { padding-bottom: 50px; }
+.shot-sticker {
+  position: absolute; right: 12px; bottom: 9px; width: 148px; padding: 0;
+  border: 2px solid rgba(248, 237, 225, 0.9); border-radius: 10px; background: #fff; cursor: zoom-in;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45); transform: rotate(-2deg);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.pshot--side { flex: 0 0 140px; margin-bottom: 2px; }
-.pshot--side .pshot-cap { font-size: 9px; letter-spacing: 0.07em; }
-.pshot--side .pshot-img { width: 100%; }
-.pshot-cap { font-family: var(--font-ui); font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(240, 236, 244, 0.6); white-space: nowrap; }
-.pshot-img { display: block; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4); transition: transform 0.25s ease; }
-.pshot:hover .pshot-img { transform: scale(1.04); }
-.pshot-img img { display: block; width: 100%; height: auto; }
-.pshot-chip {
-  position: absolute; right: -6px; bottom: 0; display: inline-flex; align-items: center; gap: 5px;
-  height: 24px; padding: 0 9px; border-radius: 999px;
-  background: var(--cream); color: var(--navy-deep);
-  font-family: var(--font-ui); font-weight: 700; font-size: 10.5px;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+.shot-sticker:hover { transform: rotate(0deg) scale(1.06); box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5); }
+.shot-sticker img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.shot-zoom {
+  position: absolute; right: -8px; bottom: -8px; width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--cream); color: var(--navy-deep); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .review-dialog.is-image { width: min(1180px, calc(100% - 20px)); }

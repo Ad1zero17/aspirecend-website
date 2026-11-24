@@ -358,17 +358,37 @@ h2 {
 .viz.anim.run .viz-chart .ar { opacity: 1; transition: opacity 0.9s ease 1.6s; }
 .viz.anim.run .chart-end { opacity: 1; transform: none; transition: opacity 0.4s ease 0.5s, transform 0.4s ease 0.5s; }
 
+/* Farbschimmer, der dem Mauszeiger folgt (Position kommt per Script als --mx / --my) */
+.card--case::before {
+  content: ""; position: absolute; inset: 0; z-index: 0; border-radius: inherit; pointer-events: none;
+  background: radial-gradient(300px circle at var(--mx, 50%) var(--my, 30%), rgba(231, 194, 125, 0.20), rgba(217, 138, 180, 0.13) 42%, transparent 72%);
+  opacity: 0; transition: opacity 0.35s ease;
+}
+.card--case > * { position: relative; z-index: 1; }
+@media (hover: hover) and (pointer: fine) { .card--case:hover::before { opacity: 1; } }
+
+/* Kopfzeile der Kachel: „Case 1“ + Kategorie */
+.card-top--case { justify-content: flex-start; flex-wrap: wrap; gap: 4px 12px; align-items: baseline; }
+.case-no { color: var(--accent); }
+.case-cat { color: rgba(240, 236, 244, 0.62); font-size: 11px; letter-spacing: 0.18em; }
+/* Große Zahl als echter Eurobetrag, etwas kleiner als die früheren Kurzwerte, damit sie in eine Zeile passt */
+.card .big--money { font-size: clamp(38px, 3.3vw, 46px); white-space: nowrap; }
+
 /* Badge hängt unten rechts unter der Kurve */
 .viz--badge { padding-bottom: 46px; }
 .viz--badge > .viz-toast { right: 12px; bottom: 10px; }
 
 /* Kleiner Original-Screenshot neben der großen Zahl, mit Überzeile und Vergrößern-Knopf */
-.bigrow { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+/* Zeile unter der großen Zahl: Unterzeile links, kleiner Original-Screenshot rechts */
+.bigrow { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; margin-top: -8px; }
+.bigrow .sub { flex: 1 1 0; min-width: 0; padding-bottom: 10px; }
 .pshot {
   position: relative; display: flex; flex-direction: column; gap: 5px; min-width: 0;
   padding: 0 0 9px; background: none; border: 0; cursor: zoom-in; text-align: left; font: inherit; color: inherit;
 }
-.pshot--side { flex: 0 1 158px; margin-bottom: 2px; }
+.pshot--side { flex: 0 0 140px; margin-bottom: 2px; }
+.pshot--side .pshot-cap { font-size: 9px; letter-spacing: 0.07em; }
+.pshot--side .pshot-img { width: 100%; }
 .pshot-cap { font-family: var(--font-ui); font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(240, 236, 244, 0.6); white-space: nowrap; }
 .pshot-img { display: block; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4); transition: transform 0.25s ease; }
 .pshot:hover .pshot-img { transform: scale(1.04); }

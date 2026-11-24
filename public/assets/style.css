@@ -380,20 +380,29 @@ h2 {
 /* Diagramm ist das letzte Element der Kachel und rückt an Seiten und Unterkante */
 .card--case .viz { margin: 4px -20px -20px; }
 
-/* Der Original-Screenshot klebt als kleines, immer sichtbares Bild unten rechts an der Kurve */
-.viz--badge { padding-bottom: 50px; }
+/* Fußzeile des Diagramms: links das durchschnittliche Monatswachstum, rechts der Original-Screenshot,
+   der als kleines, immer sichtbares Bild leicht über die Kurve ragt */
+.viz--badge { padding-bottom: 24px; }
+.viz-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 0 4px; }
+.viz-growth { margin: 0 0 2px; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.viz-growth strong { font-family: var(--font-display); font-weight: 600; font-feature-settings: "lnum"; font-size: 23px; line-height: 1; color: var(--cream); white-space: nowrap; }
+.viz-growth span { font-family: var(--font-ui); font-size: 9.5px; line-height: 1.4; letter-spacing: 0.03em; color: rgba(240, 236, 244, 0.6); max-width: 126px; }
+.shot-box { position: relative; z-index: 1; flex: 0 0 148px; display: flex; flex-direction: column; gap: 6px; margin-top: -6px; }
+.shot-cap { font-family: var(--font-ui); font-size: 8.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(240, 236, 244, 0.62); white-space: nowrap; text-align: right; }
 .shot-sticker {
-  position: absolute; right: 12px; bottom: 9px; width: 148px; padding: 0;
+  position: relative; display: block; width: 100%; padding: 0;
   border: 2px solid rgba(248, 237, 225, 0.9); border-radius: 10px; background: #fff; cursor: zoom-in;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.45); transform: rotate(-2deg);
   transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
-.shot-sticker:hover { transform: rotate(0deg) scale(1.06); box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5); }
+.shot-sticker:hover { transform: rotate(0deg) scale(1.05); box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5); }
 .shot-sticker img { display: block; width: 100%; height: auto; border-radius: 8px; }
 .shot-zoom {
-  position: absolute; right: -8px; bottom: -8px; width: 24px; height: 24px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  background: var(--cream); color: var(--navy-deep); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  position: absolute; right: -7px; bottom: -11px; display: inline-flex; align-items: center; gap: 5px;
+  height: 23px; padding: 0 9px; border-radius: 999px;
+  background: var(--cream); color: var(--navy-deep);
+  font-family: var(--font-ui); font-weight: 700; font-size: 10px;
+  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.4);
 }
 
 .review-dialog.is-image { width: min(1180px, calc(100% - 20px)); }

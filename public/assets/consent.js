@@ -149,7 +149,7 @@
     main.appendChild(details);
 
     var links = el('p', 'consent-links');
-    var a1 = el('a', '', t.privacy); a1.href = '/datenschutz/';
+    var a1 = el('a', '', t.privacy); a1.href = lang === 'en' ? '/privacy-policy/' : '/datenschutz/';
     var a2 = el('a', '', t.imprint); a2.href = '/impressum/';
     links.appendChild(a1); links.appendChild(a2);
     main.appendChild(links);

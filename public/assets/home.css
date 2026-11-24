@@ -24,9 +24,17 @@
 .method .lead { font-size: 16.5px; }
 .marquee-cap { margin: -22px 0 0; font-size: 12px; color: var(--fg-faint); text-align: center; }
 
+/* Logo-Sektion der Homepage: bewusst kleiner und ruhiger als das Raster der Landingpage */
+.logos--home { gap: 12px; padding-bottom: 64px; }
+.logos--home .logos-title { font-family: var(--font-ui); font-weight: 600; font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--fg-dim); }
+.logos--home .marquee { max-width: 920px; }
+.logos--home .partner-title { padding-top: 6px; font-size: 10px; color: var(--fg-faint); }
+.logos--home .partner-grid { max-width: 500px; gap: 6px 22px; }
+.logos--home .partner-grid img { max-width: 108px; }
+
 /* Logo-Laufband */
 .marquee--logos .marquee-track { gap: 10px; animation-name: marquee-logos; animation-duration: 70s; }
-.marquee--logos img { width: clamp(124px, 13vw, 172px); aspect-ratio: 240 / 133; object-fit: contain; border: 0; border-radius: 0; opacity: 0.94; }
+.marquee--logos img { width: clamp(96px, 9.5vw, 128px); aspect-ratio: 240 / 133; object-fit: contain; border: 0; border-radius: 0; opacity: 0.94; }
 @keyframes marquee-logos { to { transform: translateX(calc(-50% - 5px)); } }
 
 /* Ablauf als Roadmap: gestrichelte Strecke mit vier Stationen, die goldene Linie füllt sich beim Hineinscrollen */

@@ -228,6 +228,9 @@ h2 {
 .card-top { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
 .chip--tag { padding: 5px 12px; font-size: 11px; }
 
+/* Hinweis unter den Case-Karten: dichter an die Karten (Sektions-Abstand wäre 48px) */
+.cases-note { margin-top: -30px; }
+
 /* Case-Karten: animierte Mini-Ansicht oben (Vorbild rize.io). Ohne JS und bei
    reduzierter Bewegung steht der Endzustand; JS setzt .anim und spielt per .run ab. */
 .card--case { position: relative; transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease; cursor: default; }

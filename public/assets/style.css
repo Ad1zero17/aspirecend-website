@@ -332,8 +332,8 @@ h2 {
 /* --- Testimonials --- */
 .stars { color: var(--accent); font-size: 15px; letter-spacing: 0.2em; margin: 0; }
 
-/* Case-Kachel mit Kurve + Beleg (seit 24.11.2026, Case 1): Kurve im eigenen Design, darunter der
-   echte Shopify-Screenshot (klein, öffnet sich groß) und eine Notiz. */
+/* Case-Kachel mit Kurve + Beleg (seit 24.11.2026, Case 1): Kurve im eigenen Design, Badge darunter;
+   der echte Shopify-Screenshot steht klein neben der großen Zahl und öffnet sich groß. */
 .viz--stack { height: auto; padding: 18px 16px 16px; display: flex; flex-direction: column; gap: 14px; }
 .viz--stack .viz-panel { position: relative; left: auto; right: auto; top: auto; gap: 8px; padding-bottom: 12px; }
 .viz-chart { position: relative; height: 96px; margin-top: 2px; }
@@ -352,30 +352,28 @@ h2 {
 .viz.anim.run .viz-chart .ar { opacity: 1; transition: opacity 0.9s ease 1.6s; }
 .viz.anim.run .chart-end { opacity: 1; transform: none; transition: opacity 0.4s ease 0.5s, transform 0.4s ease 0.5s; }
 
-.viz-proof {
-  position: relative; display: block; width: 100%; padding: 0 0 22px;
-  background: none; border: 0; cursor: zoom-in; text-align: left; font: inherit; color: inherit;
+/* Badge hängt unten rechts unter der Kurve */
+.viz--badge { padding-bottom: 46px; }
+.viz--badge > .viz-toast { right: 12px; bottom: 10px; }
+
+/* Kleiner Original-Screenshot neben der großen Zahl, mit Überzeile und Vergrößern-Knopf */
+.bigrow { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; }
+.pshot {
+  position: relative; display: flex; flex-direction: column; gap: 5px; min-width: 0;
+  padding: 0 0 9px; background: none; border: 0; cursor: zoom-in; text-align: left; font: inherit; color: inherit;
 }
-.viz-proof .shot-panel {
-  display: block; position: relative;
-  border-radius: 10px; overflow: hidden; background: #fff;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4); transform: rotate(0.8deg);
-  transition: transform 0.25s ease;
-}
-.viz-proof:hover .shot-panel { transform: rotate(0deg) scale(1.02); }
-.viz-proof .shot-panel img { width: 100%; height: auto; display: block; }
-/* Knopf hängt unten rechts am Screenshot, die Notiz unten links: so bleibt der Verlauf frei sichtbar */
-.shot-chip {
-  position: absolute; right: 6px; bottom: 2px; display: inline-flex; align-items: center; gap: 6px;
-  height: 28px; padding: 0 11px; border-radius: 999px;
+.pshot--side { flex: 0 1 158px; margin-bottom: 2px; }
+.pshot-cap { font-family: var(--font-ui); font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(240, 236, 244, 0.6); white-space: nowrap; }
+.pshot-img { display: block; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 10px 24px rgba(0, 0, 0, 0.4); transition: transform 0.25s ease; }
+.pshot:hover .pshot-img { transform: scale(1.04); }
+.pshot-img img { display: block; width: 100%; height: auto; }
+.pshot-chip {
+  position: absolute; right: -6px; bottom: 0; display: inline-flex; align-items: center; gap: 5px;
+  height: 24px; padding: 0 9px; border-radius: 999px;
   background: var(--cream); color: var(--navy-deep);
-  font-family: var(--font-ui); font-weight: 700; font-size: 11.5px;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.35);
+  font-family: var(--font-ui); font-weight: 700; font-size: 10.5px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
 }
-/* Notiz hängt unten links halb über den Rand, verdeckt nur die Achsenbeschriftung */
-.viz-proof .viz-toast { left: 6px; right: auto; bottom: 0; padding: 7px 12px 7px 7px; }
-.viz.anim .viz-proof .viz-toast { transform: translateY(14px) rotate(-2deg); }
-.viz.anim.run .viz-proof .viz-toast { transform: rotate(-2deg); }
 
 .review-dialog.is-image { width: min(1180px, calc(100% - 20px)); }
 .review-dialog.is-image .review-dialog-inner { padding: clamp(18px, 3vw, 30px); padding-top: 58px; }
@@ -658,10 +656,6 @@ footer { border-top: 1px solid rgba(255, 255, 255, 0.07); }
   .video-row { margin: 0 -14px; padding: 6px 14px 10px; scroll-padding-left: 14px; }
 }
 @media (max-width: 520px) {
-  /* Case-Kachel: Badge und Vergrößern-Knopf passen nebeneinander (Badge ohne Symbol, Knopf kompakter) */
-  .viz-proof .viz-toast-icon { display: none; }
-  .viz-proof .viz-toast { padding: 7px 12px; left: 4px; }
-  .shot-chip { right: 4px; padding: 0 9px; font-size: 11px; gap: 5px; }
   .grid-4 { grid-template-columns: 1fr; }
   .btn { font-size: 15px; padding-left: 24px; gap: 14px; }
   .btn-arrow { width: 42px; height: 42px; }

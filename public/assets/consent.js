@@ -73,13 +73,23 @@
   }
 
   // Das Pixel-Tag im GTM setzt beim Start fbq('consent','revoke'). Sobald es gelaufen ist, geben wir frei.
-  var pixelTimer = null;
+  var pixelTimer = null, pixelGranted = false, pixelQueue = [];
+  // Für einzelne Seiten (z. B. /call-confirmed/): Funktion läuft, sobald das Pixel mit Einwilligung bereit ist.
+  // Ohne Einwilligung läuft sie nie. Beispiel: aspConsent.onPixel(function () { fbq('track', 'CompleteRegistration'); });
+  window.aspConsent = {
+    onPixel: function (cb) { if (pixelGranted) cb(); else pixelQueue.push(cb); }
+  };
   function grantPixel() {
     var tries = 0;
     clearInterval(pixelTimer);
     pixelTimer = setInterval(function () {
       tries++;
-      if (typeof window.fbq === 'function') { window.fbq('consent', 'grant'); clearInterval(pixelTimer); }
+      if (typeof window.fbq === 'function') {
+        window.fbq('consent', 'grant');
+        clearInterval(pixelTimer);
+        pixelGranted = true;
+        pixelQueue.splice(0).forEach(function (cb) { try { cb(); } catch (e) {} });
+      }
       else if (tries > 150) clearInterval(pixelTimer); // nach 30 s aufgeben
     }, 200);
   }
@@ -93,6 +103,7 @@
       grantPixel();
     } else {
       clearInterval(pixelTimer);
+      pixelGranted = false;
       gtag('consent', 'update', {
         ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied'
       });

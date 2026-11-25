@@ -1,23 +1,24 @@
 /* ===========================================================
-   Aspirecend – eigenes Cookie-Banner (ersetzt Cookiebot)
+   Aspirecend – eigenes Cookie-Banner + Meta Pixel (ersetzt Cookiebot und den Google Tag Manager)
 
    Was es tut:
    - Fragt einmal nach Einwilligung (Akzeptieren / Ablehnen gleichwertig, Auswahl unter „Einstellungen“).
-   - Der Google Tag Manager (und damit das Meta Pixel) wird ERST nach Einwilligung in „Marketing“ geladen.
-     Ohne Einwilligung wird nichts von Google oder Meta geladen.
+   - Das Meta Pixel wird ERST nach Einwilligung in „Marketing“ geladen – direkt von hier, ohne Tag Manager.
+     Ohne Einwilligung wird nichts von Meta geladen und nichts an Meta gesendet.
    - Die Entscheidung liegt 12 Monate im Browser des Besuchers (localStorage), danach wird neu gefragt.
    - Jeder Link/Knopf mit dem Attribut data-consent-open öffnet die Einstellungen erneut (Widerruf).
 
-   Zusammenspiel mit dem GTM-Container GTM-K8H9MRTP:
-   Das Pixel-Tag dort startet mit fbq('consent','revoke') und wartete bisher auf Cookiebot.
-   Dieses Skript ruft nach der Einwilligung selbst fbq('consent','grant') auf – am Tag muss nichts geändert werden.
-   Das Cookiebot-Tag im GTM muss pausiert werden, sobald diese Seite auf der echten Domain läuft
-   (sonst erscheinen dort zwei Banner).
+   Pixel-ID: dieselbe wie bisher im Tag-Manager-Container GTM-K8H9MRTP der Webflow-Seite,
+   damit Daten und Zielgruppen bei Meta nahtlos weiterlaufen. NICHT ändern.
+
+   Ereignisse:
+   - „PageView“ wird hier bei jedem Seitenaufruf gesendet (nach Einwilligung).
+   - Weitere Ereignisse über aspConsent.onPixel(...), siehe unten (z. B. die Buchung auf /call-confirmed/).
    =========================================================== */
 (function () {
   'use strict';
 
-  var GTM_ID = 'GTM-K8H9MRTP';
+  var PIXEL_ID = '216917691507569';
   var KEY = 'asp-consent';
   var VERSION = 1;
   var MAX_AGE = 365 * 24 * 60 * 60 * 1000;
@@ -25,30 +26,23 @@
   var TEXT = {
     de: {
       title: 'Cookies & Tracking',
-      body: 'Wir nutzen den Google Tag Manager und das Meta Pixel, um zu messen, wie unsere Werbung wirkt. Das passiert nur mit deiner Einwilligung. Du kannst sie jederzeit über „Cookie-Einstellungen“ am Seitenende widerrufen.',
+      body: 'Wir nutzen das Meta Pixel, um zu messen, wie unsere Werbung wirkt. Das passiert nur mit deiner Einwilligung. Du kannst sie jederzeit über „Cookie-Einstellungen“ am Seitenende widerrufen.',
       accept: 'Alle akzeptieren', decline: 'Ablehnen', settings: 'Einstellungen', save: 'Auswahl speichern',
       necessary: 'Notwendig', necessaryText: 'Speichert nur deine Cookie-Entscheidung. Immer aktiv.',
-      marketing: 'Marketing', marketingText: 'Google Tag Manager und Meta Pixel: Messung und Auswertung unserer Werbeanzeigen.',
+      marketing: 'Marketing', marketingText: 'Meta Pixel: Messung und Auswertung unserer Werbeanzeigen.',
       privacy: 'Datenschutz', imprint: 'Impressum', label: 'Cookie-Einstellungen'
     },
     en: {
       title: 'Cookies & tracking',
-      body: 'We use Google Tag Manager and the Meta Pixel to measure how our advertising performs. This only happens with your consent. You can withdraw it at any time via “Cookie settings” at the bottom of the page.',
+      body: 'We use the Meta Pixel to measure how our advertising performs. This only happens with your consent. You can withdraw it at any time via “Cookie settings” at the bottom of the page.',
       accept: 'Accept all', decline: 'Decline', settings: 'Settings', save: 'Save selection',
       necessary: 'Necessary', necessaryText: 'Only stores your cookie decision. Always active.',
-      marketing: 'Marketing', marketingText: 'Google Tag Manager and Meta Pixel: measuring and evaluating our ads.',
+      marketing: 'Marketing', marketingText: 'Meta Pixel: measuring and evaluating our ads.',
       privacy: 'Privacy Policy', imprint: 'Impressum', label: 'Cookie settings'
     }
   };
   var lang = (document.documentElement.lang || 'de').slice(0, 2) === 'en' ? 'en' : 'de';
   var t = TEXT[lang];
-
-  // --- Google Consent Mode: Standard = alles abgelehnt (greift, falls später Google-Tags dazukommen) ---
-  window.dataLayer = window.dataLayer || [];
-  function gtag() { window.dataLayer.push(arguments); }
-  gtag('consent', 'default', {
-    ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied'
-  });
 
   function read() {
     try {
@@ -61,55 +55,42 @@
     try { localStorage.setItem(KEY, JSON.stringify({ v: VERSION, marketing: marketing, t: Date.now() })); } catch (e) {}
   }
 
-  var gtmLoaded = false;
-  function loadGTM() {
-    if (gtmLoaded) return;
-    gtmLoaded = true;
-    window.dataLayer.push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
-    var f = document.getElementsByTagName('script')[0], j = document.createElement('script');
-    j.async = true;
-    j.src = 'https://www.googletagmanager.com/gtm.js?id=' + GTM_ID;
-    f.parentNode.insertBefore(j, f);
-  }
+  // --- Meta Pixel ---
+  var pixelLoaded = false, pixelGranted = false, pixelQueue = [];
 
-  // Das Pixel-Tag im GTM setzt beim Start fbq('consent','revoke'). Sobald es gelaufen ist, geben wir frei.
-  var pixelTimer = null, pixelGranted = false, pixelQueue = [];
-  // Für einzelne Seiten (z. B. /call-confirmed/): Funktion läuft, sobald das Pixel mit Einwilligung bereit ist.
+  // Für einzelne Seiten (z. B. /call-confirmed/): Die Funktion läuft, sobald das Pixel mit Einwilligung bereit ist.
   // Ohne Einwilligung läuft sie nie. Beispiel: aspConsent.onPixel(function () { fbq('track', 'CompleteRegistration'); });
   window.aspConsent = {
     onPixel: function (cb) { if (pixelGranted) cb(); else pixelQueue.push(cb); }
   };
-  function grantPixel() {
-    var tries = 0;
-    clearInterval(pixelTimer);
-    pixelTimer = setInterval(function () {
-      tries++;
-      if (typeof window.fbq === 'function') {
-        window.fbq('consent', 'grant');
-        clearInterval(pixelTimer);
-        pixelGranted = true;
-        pixelQueue.splice(0).forEach(function (cb) { try { cb(); } catch (e) {} });
-      }
-      else if (tries > 150) clearInterval(pixelTimer); // nach 30 s aufgeben
-    }, 200);
+
+  function loadPixel() {
+    if (pixelLoaded) return;
+    pixelLoaded = true;
+    // Metas Standard-Code: legt fbq an und lädt das Pixel-Skript von Meta nach.
+    (function (f, b, e, v, n, s, x) {
+      if (f.fbq) return;
+      n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+      if (!f._fbq) f._fbq = n;
+      n.push = n; n.loaded = true; n.version = '2.0'; n.queue = [];
+      s = b.createElement(e); s.async = true; s.src = v;
+      x = b.getElementsByTagName(e)[0]; x.parentNode.insertBefore(s, x);
+    })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    window.fbq('init', PIXEL_ID);
+    window.fbq('track', 'PageView');
   }
 
   function apply(marketing) {
     if (marketing) {
-      gtag('consent', 'update', {
-        ad_storage: 'granted', ad_user_data: 'granted', ad_personalization: 'granted', analytics_storage: 'granted'
-      });
-      loadGTM();
-      grantPixel();
+      var again = pixelLoaded;
+      loadPixel();
+      if (again) window.fbq('consent', 'grant'); // nach einem Widerruf auf derselben Seite wieder freigeben
+      pixelGranted = true;
+      pixelQueue.splice(0).forEach(function (cb) { try { cb(); } catch (e) {} });
     } else {
-      clearInterval(pixelTimer);
       pixelGranted = false;
-      gtag('consent', 'update', {
-        ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied', analytics_storage: 'denied'
-      });
-      if (typeof window.fbq === 'function') window.fbq('consent', 'revoke');
+      if (pixelLoaded) window.fbq('consent', 'revoke'); // Widerruf: Pixel sendet ab sofort nichts mehr
     }
-    window.dataLayer.push({ event: 'asp_consent', consent_marketing: marketing });
   }
 
   function decide(marketing) {
